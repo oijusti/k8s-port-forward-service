@@ -16,11 +16,11 @@ A Visual Studio Code extension that simplifies port forwarding for Kubernetes se
 
 - Kubernetes CLI (`kubectl`) installed and configured
 - Access to a Kubernetes cluster
-- Kubernetes services following the naming convention described below
+- Kubernetes pods following the naming convention described below
 
 ## Service Naming Convention
 
-This extension expects Kubernetes services to follow a specific naming pattern:
+This extension expects Kubernetes pods to follow a specific naming pattern:
 
 ```
 <environment>-<namespace>-<service-name>-<deployment-id>

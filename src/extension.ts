@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { exec, spawn } from "child_process";
+import { exec } from "child_process";
 
 function execPromise(cmd: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -96,6 +96,22 @@ export function activate(context: vscode.ExtensionContext) {
         const servicesList = Array.from(servicesMap.keys()).sort();
 
         if (servicesList.length === 0) {
+          const servicesMapWithoutEnv = getServicesMapWithoutEnv(
+            podsData,
+            namespace || null
+          );
+          const servicesListWithoutEnv = Array.from(
+            servicesMapWithoutEnv.keys()
+          ).sort();
+          outputChannel.appendLine(
+            `\n servicesMapWithoutEnv: ${JSON.stringify(
+              Object.fromEntries(servicesMapWithoutEnv)
+            )}`
+          );
+          outputChannel.appendLine(
+            `\n servicesListWithoutEnv: ${servicesListWithoutEnv}`
+          );
+
           vscode.window.showInformationMessage("No services found");
           return;
         }
@@ -282,6 +298,34 @@ function getServicesMap(podsData: string, namespace: string | null) {
         id: serviceId,
         namespace: namespaceColumn,
       };
+    }
+  }
+  return servicesMap;
+}
+
+function getServicesMapWithoutEnv(podsData: string, namespace: string | null) {
+  const servicesMap = new Map();
+  const lines = podsData.trim().split("\n");
+
+  // Get headers to find indices
+  const headers = lines[0].split(/\s+/);
+  const namespaceIndex = headers.indexOf("NAMESPACE");
+  const nameIndex = headers.indexOf("NAME");
+
+  for (let i = 1; i < lines.length; i++) {
+    const columns = lines[i].split(/\s+/);
+    const namespaceColumn = namespace ?? columns[namespaceIndex];
+    const nameColumn = columns[nameIndex];
+
+    // Split the name to extract serviceName and id
+    const parts = nameColumn.split("-");
+    if (parts.length > 2) {
+      const serviceName = parts.slice(0, -2).join("-");
+      const serviceId = parts.slice(-2).join("-");
+      servicesMap.set(serviceName, {
+        id: serviceId,
+        namespace: namespaceColumn,
+      });
     }
   }
   return servicesMap;
