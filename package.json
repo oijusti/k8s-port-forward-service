@@ -1,0 +1,54 @@
+{
+  "name": "k8s-port-forward-service",
+  "displayName": "Kubernetes Port Forward Service",
+  "description": "Load and forward ports for Kubernetes services with an interactive UI",
+  "version": "0.0.10",
+  "publisher": "oijusti",
+  "engines": {
+    "vscode": "^1.78.0"
+  },
+  "icon": "images/icon.png",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "kubernetes",
+    "k8s",
+    "port-forward",
+    "kubectl",
+    "service",
+    "pods",
+    "microservices"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oijusti/k8s-port-forward-service-ext"
+  },
+  "bugs": {
+    "url": "https://github.com/oijusti/k8s-port-forward-service-ext/issues"
+  },
+  "homepage": "https://github.com/oijusti/k8s-port-forward-service-ext#readme",
+  "license": "MIT",
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "k8s-service-loader.start",
+        "title": "Kubernetes: Port-Forward Service"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.1",
+    "@types/vscode": "^1.78.0",
+    "typescript": "^5.0.4",
+    "@vscode/vsce": "^2.15.0"
+  }
+}
